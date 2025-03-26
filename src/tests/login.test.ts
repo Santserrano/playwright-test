@@ -28,6 +28,69 @@ test.describe('Test automatizado con playwright', () => {
     await browser.close();
   });
 
+  test('Ingreso a horarios en la pagina principal', async () => {
+    const browser = await chromium.launch({ headless: false });
+    const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+    const page = await context.newPage();
+    
+    await page.goto(BASE_URL);
+    await page.waitForSelector('input[placeholder="Usuario"]');
+    await page.fill('input[placeholder="Usuario"]', VALID_USER);
+    await page.fill('input[placeholder="Contraseña"]', VALID_PASSWORD);
+    await page.click('input[type="image"]');
+
+    // redireccion
+    await expect(page).toHaveURL(`${BASE_URL}/Proteccion/Inicio.aspx`);
+    
+    // etiqueta header
+    await expect(page.locator('#ctl00_Label1')).toHaveText('Serrano Ramírez, Santiago Norberto - Ingeniería en Sistemas de Información(R. M. Nº 556/17) - Central');
+    
+    //selector barra desplegable
+    await page.click('#ctl00_PanelCursado_header');
+    await page.getByText(/INSCRIPCIÓN A CURSAR/i).click();
+
+    //modal de advertencia por periodo inexistente
+    await expect(page.locator('#ui-dialog-title-dialog.ui-dialog-title')).toHaveText('Advertencia');
+
+    await page.click('button');
+
+    //redirección al directorio home inicio
+    await expect(page).toHaveURL(`${BASE_URL}/Proteccion/Inicio.aspx`);
+    await expect(page.locator('#ctl00_Label1')).toHaveText('Serrano Ramírez, Santiago Norberto - Ingeniería en Sistemas de Información(R. M. Nº 556/17) - Central');
+    
+    await browser.close();
+  });
+
+  test('Test 3 augusto', async () => {
+    const browser = await chromium.launch({ headless: false });
+    const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+    const page = await context.newPage();
+    
+    await page.goto(BASE_URL);
+    await page.waitForSelector('input[placeholder="Usuario"]');
+    await page.fill('input[placeholder="Usuario"]', VALID_USER);
+    await page.fill('input[placeholder="Contraseña"]', VALID_PASSWORD);
+    await page.click('input[type="image"]');
+
+    // redireccion
+    await expect(page).toHaveURL(`${BASE_URL}/Proteccion/Inicio.aspx`);
+    
+    // etiqueta header
+    await expect(page.locator('#ctl00_Label1')).toHaveText('Serrano Ramírez, Santiago Norberto - Ingeniería en Sistemas de Información(R. M. Nº 556/17) - Central');
+    
+    //selector barra desplegablectl00_AccordionPane2_content
+    await page.click('#ctl00_AccordionPane2_header');
+
+    //await expect(page.locator('#ctl00_AccordionPane2_content.accordionContenido')).toHaveText(/Reporte Académico/i).click();
+    //await expect(page.locator('#ctl00_AccordionPane2_content.accordionContenido')).
+
+    await expect(page.locator('#ctl00_AccordionPane2_content.accordionContenido')).toHaveText(/Reporte Académico/i);
+    await page.locator('#ctl00_AccordionPane2_content.accordionContenido').click();
+
+    await browser.close();
+  });
+
+                                                
   test('Ingreso invalido con credencial 666', async () => {
     const browser = await chromium.launch({ headless: false });
     const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
