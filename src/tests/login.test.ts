@@ -83,13 +83,12 @@ test.describe('Test automatizado con playwright', () => {
 
     //await expect(page.locator('#ctl00_AccordionPane2_content.accordionContenido')).toHaveText(/Reporte Académico/i).click();
     //await expect(page.locator('#ctl00_AccordionPane2_content.accordionContenido')).
-
     await expect(page.locator('#ctl00_AccordionPane2_content.accordionContenido')).toHaveText(/Reporte Académico/i);
     await page.locator('#ctl00_AccordionPane2_content.accordionContenido').click();
 
+    await expect(page.locator('#Migrilla.text-align: left')).toHaveText(/Ingeniería de Software I/i);
     await browser.close();
   });
-
                                                 
   test('Ingreso invalido con credencial 666', async () => {
     const browser = await chromium.launch({ headless: false });
