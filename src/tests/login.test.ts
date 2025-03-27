@@ -81,12 +81,16 @@ test.describe('Test automatizado con playwright', () => {
     //selector barra desplegablectl00_AccordionPane2_content
     await page.click('#ctl00_AccordionPane2_header');
 
-    //await expect(page.locator('#ctl00_AccordionPane2_content.accordionContenido')).toHaveText(/Reporte Académico/i).click();
-    //await expect(page.locator('#ctl00_AccordionPane2_content.accordionContenido')).
-    await expect(page.locator('#ctl00_AccordionPane2_content.accordionContenido')).toHaveText(/Reporte Académico/i);
-    await page.locator('#ctl00_AccordionPane2_content.accordionContenido').click();
+    const reportLink = await page.locator('a[href="ReportPadres.aspx?Sel=3"]');
+    await reportLink.click();
 
-    await expect(page.locator('#Migrilla.text-align: left')).toHaveText(/Ingeniería de Software I/i);
+    await page.waitForLoadState('networkidle');
+
+    const targetRow = await page.locator('tr', { hasText: 'Ingeniería de Software I' });
+    const emptyCell = await targetRow.locator('td', { hasText: '\u00A0' }).first();
+
+    await expect(emptyCell).toBeVisible();
+
     await browser.close();
   });
                                                 
